@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "ledger-libs",
+  "name": "ledgerhq",
   "version": "0.0.0",
   "workspaces": [
     "packages/*"
