@@ -3,6 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.utils = undefined;
 
 var _regenerator = require("babel-runtime/regenerator");
 
@@ -85,7 +86,7 @@ var Ada = function () {
    * @returns {Promise<{major:number, minor:number, patch:number}>} Result object containing the application version number.
    *
    * @example
-   * const { major, minor, patch } = await ada.getVersion();
+   * const { major, minor, patch, flags } = await ada.getVersion();
    * console.log(`App version ${major}.${minor}.${patch}`);
    *
    */
@@ -97,7 +98,7 @@ var Ada = function () {
       var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee() {
         var _this = this;
 
-        var _send, P1_UNUSED, P2_UNUSED, response, _response, major, minor, patch;
+        var _send, P1_UNUSED, P2_UNUSED, response, _response, major, minor, patch, flags_value, FLAG_IS_DEBUG, flags;
 
         return _regenerator2.default.wrap(function _callee$(_context) {
           while (1) {
@@ -115,11 +116,17 @@ var Ada = function () {
               case 5:
                 response = _context.sent;
 
-                _utils.Assert.assert(response.length == 3);
-                _response = (0, _slicedToArray3.default)(response, 3), major = _response[0], minor = _response[1], patch = _response[2];
-                return _context.abrupt("return", { major: major, minor: minor, patch: patch });
+                _utils.Assert.assert(response.length == 4);
+                _response = (0, _slicedToArray3.default)(response, 4), major = _response[0], minor = _response[1], patch = _response[2], flags_value = _response[3];
+                FLAG_IS_DEBUG = 1;
+                //const FLAG_IS_HEADLESS = 2;
 
-              case 9:
+                flags = {
+                  isDebug: (flags_value & FLAG_IS_DEBUG) == FLAG_IS_DEBUG
+                };
+                return _context.abrupt("return", { major: major, minor: minor, patch: patch, flags: flags });
+
+              case 11:
               case "end":
                 return _context.stop();
             }
@@ -468,7 +475,7 @@ var Ada = function () {
           while (1) {
             switch (_context14.prev = _context14.next) {
               case 0:
-                console.log("sign");
+                //console.log("sign");
 
                 P1_STAGE_INIT = 0x01;
                 P1_STAGE_INPUTS = 0x02;
@@ -658,308 +665,304 @@ var Ada = function () {
                   };
                 }();
 
-                console.log("attest");
+                //console.log("attest");
+
+
                 attestedInputs = [];
                 // attest
 
                 _iteratorNormalCompletion = true;
                 _didIteratorError = false;
                 _iteratorError = undefined;
-                _context14.prev = 20;
+                _context14.prev = 18;
                 _iterator = inputs[Symbol.iterator]();
 
-              case 22:
+              case 20:
                 if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
-                  _context14.next = 32;
+                  _context14.next = 30;
                   break;
                 }
 
                 _ref15 = _step.value;
                 _txDataHex = _ref15.txDataHex, _outputIndex = _ref15.outputIndex;
-                _context14.next = 27;
+                _context14.next = 25;
                 return this._attestUtxo(_txDataHex, _outputIndex);
 
-              case 27:
+              case 25:
                 attestation = _context14.sent;
 
                 attestedInputs.push(attestation);
 
-              case 29:
+              case 27:
                 _iteratorNormalCompletion = true;
-                _context14.next = 22;
+                _context14.next = 20;
+                break;
+
+              case 30:
+                _context14.next = 36;
                 break;
 
               case 32:
-                _context14.next = 38;
-                break;
-
-              case 34:
-                _context14.prev = 34;
-                _context14.t0 = _context14["catch"](20);
+                _context14.prev = 32;
+                _context14.t0 = _context14["catch"](18);
                 _didIteratorError = true;
                 _iteratorError = _context14.t0;
 
-              case 38:
-                _context14.prev = 38;
-                _context14.prev = 39;
+              case 36:
+                _context14.prev = 36;
+                _context14.prev = 37;
 
                 if (!_iteratorNormalCompletion && _iterator.return) {
                   _iterator.return();
                 }
 
-              case 41:
-                _context14.prev = 41;
+              case 39:
+                _context14.prev = 39;
 
                 if (!_didIteratorError) {
-                  _context14.next = 44;
+                  _context14.next = 42;
                   break;
                 }
 
                 throw _iteratorError;
 
-              case 44:
-                return _context14.finish(41);
+              case 42:
+                return _context14.finish(39);
 
-              case 45:
-                return _context14.finish(38);
+              case 43:
+                return _context14.finish(36);
+
+              case 44:
+                _context14.next = 46;
+                return signTx_init(attestedInputs.length, outputs.length);
 
               case 46:
 
-                // init
-                console.log("init");
-                _context14.next = 49;
-                return signTx_init(attestedInputs.length, outputs.length);
-
-              case 49:
-
                 // inputs
-                console.log("inputs");
+                //console.log("inputs");
                 _iteratorNormalCompletion2 = true;
                 _didIteratorError2 = false;
                 _iteratorError2 = undefined;
-                _context14.prev = 53;
+                _context14.prev = 49;
                 _iterator2 = attestedInputs[Symbol.iterator]();
 
-              case 55:
+              case 51:
                 if (_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done) {
-                  _context14.next = 62;
+                  _context14.next = 58;
                   break;
                 }
 
                 attestation = _step2.value;
-                _context14.next = 59;
+                _context14.next = 55;
                 return signTx_addInput(attestation);
 
-              case 59:
+              case 55:
                 _iteratorNormalCompletion2 = true;
-                _context14.next = 55;
+                _context14.next = 51;
                 break;
 
-              case 62:
-                _context14.next = 68;
+              case 58:
+                _context14.next = 64;
                 break;
 
-              case 64:
-                _context14.prev = 64;
-                _context14.t1 = _context14["catch"](53);
+              case 60:
+                _context14.prev = 60;
+                _context14.t1 = _context14["catch"](49);
                 _didIteratorError2 = true;
                 _iteratorError2 = _context14.t1;
 
-              case 68:
-                _context14.prev = 68;
-                _context14.prev = 69;
+              case 64:
+                _context14.prev = 64;
+                _context14.prev = 65;
 
                 if (!_iteratorNormalCompletion2 && _iterator2.return) {
                   _iterator2.return();
                 }
 
-              case 71:
-                _context14.prev = 71;
+              case 67:
+                _context14.prev = 67;
 
                 if (!_didIteratorError2) {
-                  _context14.next = 74;
+                  _context14.next = 70;
                   break;
                 }
 
                 throw _iteratorError2;
 
-              case 74:
-                return _context14.finish(71);
+              case 70:
+                return _context14.finish(67);
 
-              case 75:
-                return _context14.finish(68);
+              case 71:
+                return _context14.finish(64);
 
-              case 76:
+              case 72:
 
                 // outputs
-                console.log("outputs");
+                //console.log("outputs");
                 _iteratorNormalCompletion3 = true;
                 _didIteratorError3 = false;
                 _iteratorError3 = undefined;
-                _context14.prev = 80;
+                _context14.prev = 75;
                 _iterator3 = outputs[Symbol.iterator]();
 
-              case 82:
+              case 77:
                 if (_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done) {
-                  _context14.next = 98;
+                  _context14.next = 93;
                   break;
                 }
 
                 output = _step3.value;
 
                 if (!output.address58) {
+                  _context14.next = 84;
+                  break;
+                }
+
+                _context14.next = 82;
+                return signTx_addAddressOutput(output.address58, output.amountStr);
+
+              case 82:
+                _context14.next = 90;
+                break;
+
+              case 84:
+                if (!output.path) {
                   _context14.next = 89;
                   break;
                 }
 
                 _context14.next = 87;
-                return signTx_addAddressOutput(output.address58, output.amountStr);
+                return signTx_addChangeOutput(output.path, output.amountStr);
 
               case 87:
-                _context14.next = 95;
+                _context14.next = 90;
                 break;
 
               case 89:
-                if (!output.path) {
-                  _context14.next = 94;
-                  break;
-                }
+                throw new Error("TODO");
 
-                _context14.next = 92;
-                return signTx_addChangeOutput(output.path, output.amountStr);
-
-              case 92:
-                _context14.next = 95;
+              case 90:
+                _iteratorNormalCompletion3 = true;
+                _context14.next = 77;
                 break;
 
-              case 94:
-                throw "TODO";
+              case 93:
+                _context14.next = 99;
+                break;
 
               case 95:
-                _iteratorNormalCompletion3 = true;
-                _context14.next = 82;
-                break;
-
-              case 98:
-                _context14.next = 104;
-                break;
-
-              case 100:
-                _context14.prev = 100;
-                _context14.t2 = _context14["catch"](80);
+                _context14.prev = 95;
+                _context14.t2 = _context14["catch"](75);
                 _didIteratorError3 = true;
                 _iteratorError3 = _context14.t2;
 
-              case 104:
-                _context14.prev = 104;
-                _context14.prev = 105;
+              case 99:
+                _context14.prev = 99;
+                _context14.prev = 100;
 
                 if (!_iteratorNormalCompletion3 && _iterator3.return) {
                   _iterator3.return();
                 }
 
-              case 107:
-                _context14.prev = 107;
+              case 102:
+                _context14.prev = 102;
 
                 if (!_didIteratorError3) {
-                  _context14.next = 110;
+                  _context14.next = 105;
                   break;
                 }
 
                 throw _iteratorError3;
 
-              case 110:
-                return _context14.finish(107);
+              case 105:
+                return _context14.finish(102);
 
-              case 111:
-                return _context14.finish(104);
+              case 106:
+                return _context14.finish(99);
 
-              case 112:
-
-                // confirm
-                console.log("confirm");
-                _context14.next = 115;
+              case 107:
+                _context14.next = 109;
                 return signTx_awaitConfirm();
 
-              case 115:
+              case 109:
                 _ref16 = _context14.sent;
                 txHashHex = _ref16.txHashHex;
 
 
-                console.log("witnesses");
+                //console.log("witnesses");
                 witnesses = [];
                 _iteratorNormalCompletion4 = true;
                 _didIteratorError4 = false;
                 _iteratorError4 = undefined;
-                _context14.prev = 122;
+                _context14.prev = 115;
                 _iterator4 = inputs[Symbol.iterator]();
 
-              case 124:
+              case 117:
                 if (_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done) {
-                  _context14.next = 133;
+                  _context14.next = 126;
                   break;
                 }
 
                 input = _step4.value;
-                _context14.next = 128;
+                _context14.next = 121;
                 return signTx_getWitness(input.path);
 
-              case 128:
+              case 121:
                 witness = _context14.sent;
 
                 witnesses.push(witness);
 
-              case 130:
+              case 123:
                 _iteratorNormalCompletion4 = true;
-                _context14.next = 124;
+                _context14.next = 117;
                 break;
 
-              case 133:
-                _context14.next = 139;
+              case 126:
+                _context14.next = 132;
                 break;
 
-              case 135:
-                _context14.prev = 135;
-                _context14.t3 = _context14["catch"](122);
+              case 128:
+                _context14.prev = 128;
+                _context14.t3 = _context14["catch"](115);
                 _didIteratorError4 = true;
                 _iteratorError4 = _context14.t3;
 
-              case 139:
-                _context14.prev = 139;
-                _context14.prev = 140;
+              case 132:
+                _context14.prev = 132;
+                _context14.prev = 133;
 
                 if (!_iteratorNormalCompletion4 && _iterator4.return) {
                   _iterator4.return();
                 }
 
-              case 142:
-                _context14.prev = 142;
+              case 135:
+                _context14.prev = 135;
 
                 if (!_didIteratorError4) {
-                  _context14.next = 145;
+                  _context14.next = 138;
                   break;
                 }
 
                 throw _iteratorError4;
 
-              case 145:
-                return _context14.finish(142);
+              case 138:
+                return _context14.finish(135);
 
-              case 146:
-                return _context14.finish(139);
+              case 139:
+                return _context14.finish(132);
 
-              case 147:
+              case 140:
                 return _context14.abrupt("return", {
                   txHashHex: txHashHex,
                   witnesses: witnesses
                 });
 
-              case 148:
+              case 141:
               case "end":
                 return _context14.stop();
             }
           }
-        }, _callee14, this, [[20, 34, 38, 46], [39,, 41, 45], [53, 64, 68, 76], [69,, 71, 75], [80, 100, 104, 112], [105,, 107, 111], [122, 135, 139, 147], [140,, 142, 146]]);
+        }, _callee14, this, [[18, 32, 36, 44], [37,, 39, 43], [49, 60, 64, 72], [65,, 67, 71], [75, 95, 99, 107], [100,, 102, 106], [115, 128, 132, 140], [133,, 135, 139]]);
       }));
 
       function signTransaction(_x9, _x10) {
@@ -973,4 +976,5 @@ var Ada = function () {
 }();
 
 exports.default = Ada;
+exports.utils = _utils2.default;
 //# sourceMappingURL=Ada.js.map

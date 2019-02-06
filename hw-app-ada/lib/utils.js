@@ -21,6 +21,7 @@ exports.buf_to_amount = buf_to_amount;
 exports.amount_to_buf = amount_to_buf;
 exports.base58_encode = base58_encode;
 exports.base58_decode = base58_decode;
+exports.str_to_path = str_to_path;
 
 var _baseX = require("base-x");
 
@@ -32,6 +33,8 @@ var BASE58_ALPHABET = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxy
 
 var bs58 = (0, _baseX2.default)(BASE58_ALPHABET);
 
+var HARDENED = 0x80000000;
+
 // We use bs10 as an easy way to parse/encode amount strings
 var bs10 = (0, _baseX2.default)("0123456789");
 
@@ -41,7 +44,7 @@ var MAX_LOVELACE_SUPPLY_STR = ["45", "000", "000", "000", "000000"].join("");
 var Precondition = exports.Precondition = {
   // Generic check
   check: function check(cond) {
-    if (!cond) throw "Precondition failed";
+    if (!cond) throw new Error("Precondition failed");
   },
   // Basic types
   checkIsString: function checkIsString(data) {
@@ -148,7 +151,7 @@ var Precondition = exports.Precondition = {
 
 var Assert = exports.Assert = {
   assert: function assert(cond) {
-    if (!cond) throw "Assertion failed";
+    if (!cond) throw new Error("Assertion failed");
   }
 };
 
@@ -258,7 +261,7 @@ function stripRetcodeFromResponse(response) {
   var L = response.length - 2;
   var retcode = response.slice(L, L + 2);
 
-  if (retcode.toString("hex") != "9000") throw "Invalid retcode " + retcode.toString("hex");
+  if (retcode.toString("hex") != "9000") throw new Error("Invalid retcode " + retcode.toString("hex"));
   return response.slice(0, L);
 }
 
@@ -268,7 +271,7 @@ function buf_to_amount(data) {
 
   var encoded = bs10.encode(data);
   // Strip leading zeros
-  return encoded.replace(/^0*./, "");
+  return encoded.replace(/^0*(.)/, "$1");
 }
 
 function amount_to_buf(amount) {
@@ -294,7 +297,40 @@ function base58_decode(data) {
   return bs58.decode(data);
 }
 
+function safe_parseInt(str) {
+  Precondition.checkIsString(str);
+  var i = parseInt(str);
+  // Check that we parsed everything
+  Precondition.check("" + i == str);
+  // Could be invalid
+  Precondition.check(!isNaN(i));
+  // Could still be float
+  Precondition.checkIsInteger(i);
+  return i;
+}
+
+function parseBIP32Index(str) {
+  var base = 0;
+  if (str.endsWith("'")) {
+    str = str.slice(0, -1);
+    base = HARDENED;
+  }
+  var i = safe_parseInt(str);
+  Precondition.check(i >= 0);
+  Precondition.check(i < HARDENED);
+  return base + i;
+}
+
+function str_to_path(data) {
+  Precondition.checkIsString(data);
+  Precondition.check(data.length > 0);
+
+  return data.split("/").map(parseBIP32Index);
+}
+
 exports.default = {
+  HARDENED: HARDENED,
+
   hex_to_buf: hex_to_buf,
   buf_to_hex: buf_to_hex,
 
@@ -314,6 +350,8 @@ exports.default = {
   base58_decode: base58_decode,
 
   chunkBy: chunkBy,
-  stripRetcodeFromResponse: stripRetcodeFromResponse
+  stripRetcodeFromResponse: stripRetcodeFromResponse,
+
+  str_to_path: str_to_path
 };
 //# sourceMappingURL=utils.js.map
