@@ -83,7 +83,7 @@ var Ada = function () {
   /**
    * Returns an object containing the app version.
    *
-   * @returns {Promise<{major:number, minor:number, patch:number}>} Result object containing the application version number.
+   * @returns {Promise<GetVersionResponse>} Result object containing the application version number.
    *
    * @example
    * const { major, minor, patch, flags } = await ada.getVersion();
@@ -302,8 +302,8 @@ var Ada = function () {
     /**
      * @description Get a public key from the specified BIP 32 path.
      *
-     * @param {Array<number>} indexes The path indexes. Path must begin with `44'/1815'/n'`, and may be up to 10 indexes long.
-     * @return {Promise<{ publicKey:string, chainCode:string }>} The public key with chaincode for the given path.
+     * @param {BIP32Path} indexes The path indexes. Path must begin with `44'/1815'/n'`, and may be up to 10 indexes long.
+     * @return {Promise<GetExtendedPublicKeyResponse>} The public key with chaincode for the given path.
      *
      * @example
      * const { publicKey, chainCode } = await ada.getExtendedPublicKey([ HARDENED + 44, HARDENED + 1815, HARDENED + 1 ]);
@@ -364,8 +364,8 @@ var Ada = function () {
     /**
      * @description Gets an address from the specified BIP 32 path.
      *
-     * @param {Array<number>} indexes The path indexes. Path must begin with `44'/1815'/i'/(0 or 1)/j`, and may be up to 10 indexes long.
-     * @return {Promise<{ address:string }>} The address for the given path.
+     * @param {BIP32Path} indexes The path indexes. Path must begin with `44'/1815'/i'/(0 or 1)/j`, and may be up to 10 indexes long.
+     * @return {Promise<DeriveAddressResponse>} The address for the given path.
      *
      * @throws 5001 - The path provided does not have the first 3 indexes hardened or 4th index is not 0 or 1
      * @throws 5002 - The path provided is less than 5 indexes
