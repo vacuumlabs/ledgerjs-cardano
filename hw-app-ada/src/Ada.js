@@ -169,7 +169,7 @@ export default class Ada {
 
     const P2_UNUSED = 0x00;
 
-    const CHUNK_SIZE = 255;
+    const CHUNK_SIZE = 250;
 
     {
       // Initial request
